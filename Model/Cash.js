@@ -11,4 +11,11 @@ class Cash{
     setCurrency(currency){
         this.currency = currency;
     }
+
+    getMode() {
+        return {
+            type: "Cash",
+            currency: this.currency
+        }
+    }
 }

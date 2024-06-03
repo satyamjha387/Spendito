@@ -27,6 +27,7 @@ class User {
 
     addTransaction(transaction) {
         this.transactions.push(transaction);
+        
     }
 
     

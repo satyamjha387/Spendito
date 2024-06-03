@@ -14,4 +14,11 @@ class UPI {
     setBankAccount(bankAccount) {
         this.bankAccount = bankAccount;
     }
- }
+
+    getMode() {
+        return {
+            type: "UPI",
+            bankAccount: this.bankAccount
+        }
+    }
+}

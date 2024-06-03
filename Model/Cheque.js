@@ -19,4 +19,12 @@ class Cheque {
     setChequeNumber(chequeNumber){
         this.chequeNumber = chequeNumber
     }
+
+    getMode() {
+        return {
+            type: "Cheque",
+            bankAccount: this.bankAccount,
+            chequeNumber: this.chequeNumber
+        }
+    }
 }
