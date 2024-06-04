@@ -40,4 +40,8 @@ class Transaction {
         this.status = status
         this.remark = remark
     }
-}
+
+    getId() {
+        return this.transactionId;
+    }
+ }
