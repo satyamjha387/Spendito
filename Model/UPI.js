@@ -1,7 +1,5 @@
 class UPI {
-    constructor() {
-        this.bankAccount = "";
-    }
+    
 
     constructor(bankAccount) {
         this.bankAccount = bankAccount;
@@ -22,3 +20,5 @@ class UPI {
         }
     }
 }
+
+export default UPI;

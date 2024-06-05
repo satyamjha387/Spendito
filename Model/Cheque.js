@@ -1,8 +1,5 @@
 class Cheque {
-    constructor(){
-        this.bankAccount = "",
-        this.chequeNumber  = ""
-    }
+    
     constructor(bankAccount, chequeNumber){
         this.bankAccount = bankAccount,
         this.chequeNumber = chequeNumber
@@ -28,3 +25,5 @@ class Cheque {
         }
     }
 }
+
+export default Cheque;

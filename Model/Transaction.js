@@ -1,14 +1,6 @@
-import { Status } from "./Status"
+import { Status } from "./Status.js"
 class Transaction {
-    constructor() {
-        this.userId = ""
-        this.date = null
-        this.amount = 0
-        this.mode = null
-        this.status = Status.PENDING
-        this.remark = ""
-        this.transactionId = ""
-    }
+    
 
     constructor(userId, date, amount, mode, status, remark, transactionId) {
         this.userId = userId
@@ -32,6 +24,18 @@ class Transaction {
         }
     }
 
+    getDate() {
+        return this.date;
+    }
+
+    getMode() {
+        return this.mode;
+    }
+
+    getRemark() {
+        return this.remark;
+    }
+
     setTransaction(userId, date, amount, mode, status, remark) {
         this.userId = userId
         this.date = date
@@ -45,3 +49,5 @@ class Transaction {
         return this.transactionId;
     }
  }
+
+ export default Transaction;
