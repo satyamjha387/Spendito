@@ -1,0 +1,20 @@
+{
+  "name": "spendito",
+  "version": "1.0.0",
+  "description": "This is a simple expense tracker which helps a person in managing their expense throughout the annual year",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/satyamjha387/Spendito.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/satyamjha387/Spendito/issues"
+  },
+  "homepage": "https://github.com/satyamjha387/Spendito#readme"
+}
