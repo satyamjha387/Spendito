@@ -49,7 +49,7 @@ class User {
         this.transactions.push(transaction.getTransaction());
         // hashtable update
         this.transactionsHashTable.set(transaction.getId(), this.transactions.length - 1);
-        if(this.dailyTransactions.at(-1).length === 0 || this.checkIfToday(this.dailyTransactions.at(-1).at(-1), transaction.date)) {
+        if (this.dailyTransactions.at(-1).length === 0 || this.checkIfToday(this.dailyTransactions.at(-1).at(-1), transaction.date)) {
             this.dailyTransactions.at(-1).push(transaction.getTransaction());
             // hashtable update
             this.dailyTransactionsHashTable.set(transaction.getId(), [this.dailyTransactions.length - 1, this.dailyTransactions.at(-1).length - 1]);
@@ -59,7 +59,7 @@ class User {
             this.dailyTransactionsHashTable.set(transaction.getId(), [this.dailyTransactions.length - 1, this.dailyTransactions.at(-1).length - 1]);
         }
 
-        if(this.monthlyTransactions.at(-1).length === 0 || this.checkIfSameMonth(this.monthlyTransactions.at(-1).at(-1), transaction.date)) {
+        if (this.monthlyTransactions.at(-1).length === 0 || this.checkIfSameMonth(this.monthlyTransactions.at(-1).at(-1), transaction.date)) {
             this.monthlyTransactions.at(-1).push(transaction.getTransaction());
             // hashtable update
             this.monthlyTransactionsHashTable.set(transaction.getId(), [this.monthlyTransactions.length - 1, this.monthlyTransactions.at(-1).length - 1]);
@@ -68,8 +68,8 @@ class User {
             // hashtable update
             this.monthlyTransactionsHashTable.set(transaction.getId(), [this.monthlyTransactions.length - 1, this.monthlyTransactions.at(-1).length - 1]);
         }
-        
-        if(this.yearlyTransactions.at(-1).length === 0 || this.checkIfSameFullYear(this.yearlyTransactions.at(-1).at(-1), transaction.date)) {
+
+        if (this.yearlyTransactions.at(-1).length === 0 || this.checkIfSameFullYear(this.yearlyTransactions.at(-1).at(-1), transaction.date)) {
             this.yearlyTransactions.at(-1).push(transaction.getTransaction());
             // hashtable update
             this.yearlyTransactionsHashTable.set(transaction.getId(), [this.yearlyTransactions.length - 1, this.yearlyTransactions.at(-1).length - 1]);
@@ -79,5 +79,64 @@ class User {
             this.yearlyTransactionsHashTable.set(transaction.getId(), [this.yearlyTransactions.length - 1, this.yearlyTransactions.at(-1).length - 1]);
         }
     }
-}
+    editTransaction(userId, date, amount, mode, status, remark, transactionId) {
+        index = this.transactions.get(transactionId); //example 4
+        dailyIndexes = this.dailyTransactionsHashTable.get(transactionId);  //example [0,1]
+        monthlyIndexes = this.monthlyTransactionsHashTable.get(transactionId);
+        yearlyIndexes = this.yearlyTransactionsHashTable.get(transactionId);
+        
+        this.transactions.at(index).setTransaction(userId, date, amount, mode, status, remark);
 
+        //If date is not allowed to be updated
+        this.dailyTransactions.at(dailyIndexes.at(0)).at(dailyIndexes.at(1)).setTransaction(userId, date, amount, mode, status, remark);
+        this.monthlyTransactions.at(monthlyIndexes.at(0)).at(monthlyIndexes.at(1)).setTransaction(userId, date, amount, mode, status, remark);
+        this.yearlyTransactions.at(yearlyIndexes.at(0)).at(yearlyIndexes.at(1)).setTransaction(userId, date, amount, mode, status, remark);
+        
+
+        /*
+        newTransaction = new Transaction(userId, date, amount, mode, status, remark, transactionId);  //new object 
+        //If date is allowed to be updated 
+        if (this.checkIfToday(this.dailyTransactions.at(dailyIndexes.at(0)).at(dailyIndexes.at(1)), date)) {
+            this.dailyTransactions.at(dailyIndexes.at(0)).at(dailyIndexes.at(1)).setTransaction(userId, date, amount, mode, status, remark);
+        }
+        else {
+            //if date is updated and not today's transaction
+            this.dailyTransactions.at(dailyIndexes.at(0)).splice(dailyIndexes.at(1),1);  //removing from daily transaction[]
+            for(let i=0;i<this.dailyTransactions.length;i++){
+                //find the appropriate index whose transaction dates are equal to updated date
+                if(this.checkIfToday(this.dailyTransactions.at(i).at(0),date)){
+                    this.dailyTransactions.at(i).push(newTransaction);  // Add there 
+                    //Update hashTable 
+                    this.dailyTransactionsHashTable.set(transactionId,[i,this.dailyTransactions.at(i).length - 1])
+                    break;
+                }
+            }
+        }
+        if (this.checkIfSameMonth(this.monthlyTransactions.at(monthlyIndexes.at(0)).at(monthlyIndexes.at(1)), date)) {
+            this.monthlyTransactions.at(monthlyIndexes.at(0)).at(monthlyIndexes.at(1)).setTransaction(userId, date, amount, mode, status, remark);
+        }
+        else {
+            this.monthlyTransactions.at(monthlyIndexes.at(0)).splice(monthlyIndexes.at(1),1);
+            for(let i=0;i<this.monthlyTransactions.length;i++){
+                if(this.checkIfSameMonth(this.monthlyTransactions.at(i).at(0),date)){
+                    this.monthlyTransactions.at(i).push(newTransaction);
+                    this.monthlyTransactionsHashTable.set(transactionId,[i,this.monthlyTransactions.at(i).length - 1]);
+                    break;
+                }
+            }
+        }
+        if (this.checkIfSameFullYear(this.yearlyTransactions.at(yearlyIndexes.at(0)).at(yearlyIndexes.at(1)), date)) {
+            this.yearlyTransactions.at(yearlyIndexes.at(0)).at(yearlyIndexes.at(1)).setTransaction(userId, date, amount, mode, status, remark);
+        }
+        else {
+            this.yearlyTransactions.at(yearlyIndexes.at(0)).splice(yearlyIndexes.at(1),1);
+            for(let i=0;i<this.yearlyTransactions.length;i++){
+                if(this.checkIfSameFullYear(this.yearlyTransactions.at(i).at(0),date)){
+                    this.yearlyTransactions.at(i).push(newTransaction);
+                    this.yearlyTransactionsHashTable.set(transactionId,[i,this.yearlyTransactions.at(i).length - 1]);
+                    break;
+                }
+            }
+        } */
+    }
+}
