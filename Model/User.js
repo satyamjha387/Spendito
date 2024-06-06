@@ -4,7 +4,7 @@ class User {
     // non-parameterized constructor
     
     // parameterized constructor
-    constructor(name, age, email, userId, bankAccounts) {
+    constructor(userId,email,name, age, bankAccounts) {
         this.name = name;
         this.age = age;
         this.email = email;
@@ -24,9 +24,9 @@ class User {
     getUser(){ 
         return {
             userId: this.userId,
+            email: this.email,
             name: this.name,
             age: this.age,
-            email: this.email,
             bankAccounts: this.bankAccounts
         }
     }
@@ -100,13 +100,13 @@ class User {
     }
 
 
-    editTransaction(userId, date, amount, mode, status, remark, transactionId) {
+    editTransaction(userId,transactionId,amount, mode, status, date, remark) {
         const index = this.transactionsHashTable.get(transactionId); //example 4
         // const dailyIndexes = this.dailyTransactionsHashTable.get(transactionId);  //example [0,1]
         // const monthlyIndexes = this.monthlyTransactionsHashTable.get(transactionId);
         // const yearlyIndexes = this.yearlyTransactionsHashTable.get(transactionId);
         
-        this.transactions.at(index).setTransaction(userId, date, amount, mode, status, remark);
+        this.transactions.at(index).setTransaction(userId, amount, mode, status,date, remark);
 
 
 
@@ -206,45 +206,6 @@ class User {
             result.push(this.getTransaction(transactionId));
         }
         return result;
-    }
-
-
-    getDailyTransactions(){
-        const dayWiseResult = [];
-        for(let i=0;i<this.dailyTransactions.length;i++){
-            const perDayTransactions = [];
-            for(let j=0;j<this.dailyTransactions[i].length;j++){
-                perDayTransactions.push(this.getTransaction(this.dailyTransactions[i][j]));
-            }
-            dayWiseResult.push(perDayTransactions);
-        }
-        return dayWiseResult;
-    }
-
-
-    getMonthlyTransactions(){
-        const monthWiseResult = [];
-        for(let i=0;i<this.monthlyTransactions.length;i++){
-            const perMonthTransactions = [];
-            for(let j=0;j<this.monthlyTransactions[i].length;j++){
-                perMonthTransactions.push(this.getTransaction(this.monthlyTransactions[i][j]));
-            }
-            monthWiseResult.push(perMonthTransactions);
-        }
-        return monthWiseResult;
-    }
-
-
-    getYearlyTransactions(){
-        const yearWiseResult = [];
-        for(let i=0;i<this.yearlyTransactions.length;i++){
-            const perYearTransactions = [];
-            for(let j=0;j<this.yearlyTransactions[i].length;j++){
-                perYearTransactions.push(this.getTransaction(this.yearlyTransactions[i][j]));
-            }
-            yearWiseResult.push(perYearTransactions);
-        }
-        return yearWiseResult;
     }
     
 }

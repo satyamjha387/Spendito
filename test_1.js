@@ -4,15 +4,15 @@ import UPI from "./Model/UPI.js";
 import Cheque from "./Model/Cheque.js";
 import Cash from "./Model/Cash.js";
 import User from "./Model/User.js";
-const user = new User("Satyam", 23, "satyam@gmail.com", "satyam_jha387", ["Kotak", "SBI"]);
+const user = new User("satyam_jha387","satyam@gmail.com","Satyam", 23, ["Kotak", "SBI"]);
 // console.log(user.getUser());
 // console.log("/////////////////////////////////////////////");
-const t1 = new Transaction(user.getId(),new Date(2024,5,6),2000,new UPI("Axis"),Status.PENDING,"Wifi","001");
-const t2 = new Transaction(user.getId(),new Date(2024,5,6),4000,new Cash("INR"),Status.SUCCESS,"TV","002");
-const t3 = new Transaction(user.getId(),new Date(2024,5,6),5500,new Cheque("Axis","201"),Status.FAILURE,"Wifi","003");
-const t4 = new Transaction(user.getId(),new Date(2024,6,5),2000,new UPI("Axis"),Status.PENDING,"Wifi","004");
-const t5 = new Transaction(user.getId(),new Date(2024,6,6),4000,new Cash("INR"),Status.SUCCESS,"TV","005");
-const t6 = new Transaction(user.getId(),new Date(2025,6,7),5500,new Cheque("Axis","203"),Status.FAILURE,"Wifi","006");
+const t1 = new Transaction(user.getId(),"001",2000,new UPI("Axis"),Status.PENDING,new Date(2024,5,6),"Wifi");
+const t2 = new Transaction(user.getId(),"002",4000,new Cash("INR"),Status.SUCCESS,new Date(2024,5,6),"TV");
+const t3 = new Transaction(user.getId(),"003",5500,new Cheque("Axis","201"),Status.FAILURE,new Date(2024,5,6),"Wifi");
+const t4 = new Transaction(user.getId(),"004",2000,new UPI("Axis"),Status.PENDING,new Date(2024,6,5),"Wifi");
+const t5 = new Transaction(user.getId(),"005",4000,new Cash("INR"),Status.SUCCESS,new Date(2024,6,6),"TV");
+const t6 = new Transaction(user.getId(),"006",5500,new Cheque("Axis","203"),Status.FAILURE,new Date(2025,6,7),"Wifi");
 
 user.addTransaction(t1);
 // console.log(user.getTransaction(t1.getId()));
@@ -30,7 +30,7 @@ user.addTransaction(t4);
 user.addTransaction(t5);
 user.addTransaction(t6);
 
-// user.editTransaction(user.getId(), t2.getDate(), 20, t2.getMode(), Status.SUCCESS, "Canteen ka samosa ;-)", t2.getId());
+//user.editTransaction(user.getId(),t2.getId(), 20, t2.getMode(), Status.SUCCESS,t2.getDate(), "Canteen ka samosa ;-)");
 // console.log(user.getAllTransactions());
 // console.log("EDIT: GET ALL TRANSACTIONS DONE/////////////////////////////////////////////");
 
@@ -52,6 +52,8 @@ console.log(user.getTransactionsFromDate(new Date(2024,6,6)))
 console.log("Transactions done on 2025 July 7 are ...")
 console.log(user.getTransactionsFromDate(new Date(2025,6,7)))
 
+console.log("Transactions done on 2025 October 7 are ...")
+console.log(user.getTransactionsFromDate(new Date(2025,9,7)))
 
 
 
