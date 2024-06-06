@@ -18,6 +18,7 @@ class User {
         this.dailyTransactionsHashTable = new Map();// map of t_id -> coordinates of transaction in dailyTransactions 2-d array
         this.monthlyTransactionsHashTable = new Map();// map of t_id -> coordinates of transaction in monthlyTransactions 2-d array
         this.yearlyTransactionsHashTable = new Map();// map of t_id -> coordinates of transaction in yearlyTransactions 2-d array
+        this.dateToTransactionIdsHashTable = new Map(); //Map of date -> array of transactionIds done on that day
     }
 
     getUser(){ 
@@ -56,6 +57,13 @@ class User {
     addTransaction(transaction) {
         this.transactions.push(transaction);
         
+        if(this.dateToTransactionIdsHashTable.has(transaction.getDate().toDateString())){
+            this.dateToTransactionIdsHashTable.get(transaction.getDate().toDateString()).push(transaction.getId());
+        }
+        else {
+            this.dateToTransactionIdsHashTable.set(transaction.getDate().toDateString(),[transaction.getId()]);
+        }
+
         // hashtable update
         this.transactionsHashTable.set(transaction.getId(), this.transactions.length - 1);
         //addding in daily transaction if the last element of the dailyTransations 2d array is empty or
@@ -99,6 +107,10 @@ class User {
         // const yearlyIndexes = this.yearlyTransactionsHashTable.get(transactionId);
         
         this.transactions.at(index).setTransaction(userId, date, amount, mode, status, remark);
+
+
+
+        
         //We Do not need to update the the 2-d arrays as the transactionId does not change
         //If date is not allowed to be updated
         // this.dailyTransactions.at(dailyIndexes.at(0)).at(dailyIndexes.at(1)).setTransaction(userId, date, amount, mode, status, remark);
@@ -181,7 +193,59 @@ class User {
             this.yearlyTransactionsHashTable.set(this.yearlyTransactions[yearlyIndexes.at(0)][y_index], [yearlyIndexes.at(0), y_index]);
         }
     }
+    
+    
+    getTransactionsFromDate(date){
+        const result = [];
+        if(this.dateToTransactionIdsHashTable.has(date.toDateString())==false){
+            return result;
+        }
+        //return this.dateToTransactionIdsHashTable.get(date.toDateString());
+        for(let i=0;i<this.dateToTransactionIdsHashTable.get(date.toDateString()).length;i++){
+            let transactionId = this.dateToTransactionIdsHashTable.get(date.toDateString())[i];
+            result.push(this.getTransaction(transactionId));
+        }
+        return result;
+    }
 
+
+    getDailyTransactions(){
+        const dayWiseResult = [];
+        for(let i=0;i<this.dailyTransactions.length;i++){
+            const perDayTransactions = [];
+            for(let j=0;j<this.dailyTransactions[i].length;j++){
+                perDayTransactions.push(this.getTransaction(this.dailyTransactions[i][j]));
+            }
+            dayWiseResult.push(perDayTransactions);
+        }
+        return dayWiseResult;
+    }
+
+
+    getMonthlyTransactions(){
+        const monthWiseResult = [];
+        for(let i=0;i<this.monthlyTransactions.length;i++){
+            const perMonthTransactions = [];
+            for(let j=0;j<this.monthlyTransactions[i].length;j++){
+                perMonthTransactions.push(this.getTransaction(this.monthlyTransactions[i][j]));
+            }
+            monthWiseResult.push(perMonthTransactions);
+        }
+        return monthWiseResult;
+    }
+
+
+    getYearlyTransactions(){
+        const yearWiseResult = [];
+        for(let i=0;i<this.yearlyTransactions.length;i++){
+            const perYearTransactions = [];
+            for(let j=0;j<this.yearlyTransactions[i].length;j++){
+                perYearTransactions.push(this.getTransaction(this.yearlyTransactions[i][j]));
+            }
+            yearWiseResult.push(perYearTransactions);
+        }
+        return yearWiseResult;
+    }
     
 }
 
