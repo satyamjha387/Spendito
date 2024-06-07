@@ -18,7 +18,7 @@ class User {
         this.dailyTransactionsHashTable = new Map();// map of t_id -> coordinates of transaction in dailyTransactions 2-d array
         this.monthlyTransactionsHashTable = new Map();// map of t_id -> coordinates of transaction in monthlyTransactions 2-d array
         this.yearlyTransactionsHashTable = new Map();// map of t_id -> coordinates of transaction in yearlyTransactions 2-d array
-        this.dateToTransactionIdsHashTable = new Map(); //Map of date -> array of transactionIds done on that day
+        this.dateToDailyTransactionIdxHashTable = new Map(); //Map of date -> row(index) no of dailyTransaction (containing Tids) corresponding to that date
     }
 
     getUser(){ 
@@ -56,14 +56,6 @@ class User {
     
     addTransaction(transaction) {
         this.transactions.push(transaction);
-        
-        if(this.dateToTransactionIdsHashTable.has(transaction.getDate().toDateString())){
-            this.dateToTransactionIdsHashTable.get(transaction.getDate().toDateString()).push(transaction.getId());
-        }
-        else {
-            this.dateToTransactionIdsHashTable.set(transaction.getDate().toDateString(),[transaction.getId()]);
-        }
-
         // hashtable update
         this.transactionsHashTable.set(transaction.getId(), this.transactions.length - 1);
         //addding in daily transaction if the last element of the dailyTransations 2d array is empty or
@@ -72,10 +64,13 @@ class User {
             this.dailyTransactions.at(-1).push(transaction.getId());
             // hashtable update
             this.dailyTransactionsHashTable.set(transaction.getId(), [this.dailyTransactions.length - 1, this.dailyTransactions.at(-1).length - 1]);
+            this.dateToDailyTransactionIdxHashTable.set(transaction.getDate().toDateString(),this.dailyTransactions.length-1);
         } else {
             this.dailyTransactions.push([transaction.getId()]);
             // hashtable update
             this.dailyTransactionsHashTable.set(transaction.getId(), [this.dailyTransactions.length - 1, this.dailyTransactions.at(-1).length - 1]);
+            this.dateToDailyTransactionIdxHashTable.set(transaction.getDate().toDateString(),this.dailyTransactions.length-1);
+        
         }
 
         if (this.monthlyTransactions.at(-1).length === 0 || this.checkIfSameMonth(this.getTransaction(this.monthlyTransactions.at(-1).at(-1)), transaction.date)) {
@@ -197,13 +192,14 @@ class User {
     
     getTransactionsFromDate(date){
         const result = [];
-        if(this.dateToTransactionIdsHashTable.has(date.toDateString())==false){
+        if(this.dateToDailyTransactionIdxHashTable.has(date.toDateString())==false){
             return result;
         }
-        //return this.dateToTransactionIdsHashTable.get(date.toDateString());
-        for(let i=0;i<this.dateToTransactionIdsHashTable.get(date.toDateString()).length;i++){
-            let transactionId = this.dateToTransactionIdsHashTable.get(date.toDateString())[i];
-            result.push(this.getTransaction(transactionId));
+        //return this.dateToDailyTransactionIdxHashTable.get(date.toDateString());
+        let idx = this.dateToDailyTransactionIdxHashTable.get(date.toDateString());
+        for(let i=0;i<this.dailyTransactions[idx].length;i++){
+            let tId = this.dailyTransactions[idx][i]; //Transaction Id
+            result.push(this.getTransaction(tId));
         }
         return result;
     }
