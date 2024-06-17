@@ -19,6 +19,7 @@ class User {
         this.monthlyTransactionsHashTable = new Map();// map of t_id -> coordinates of transaction in monthlyTransactions 2-d array
         this.yearlyTransactionsHashTable = new Map();// map of t_id -> coordinates of transaction in yearlyTransactions 2-d array
         this.dateToDailyTransactionIdxHashTable = new Map(); //Map of date -> row(index) no of dailyTransaction (containing Tids) corresponding to that date
+        this.fullTransaction = new Map(); // t_id -> transaction
     }
 
     getUser(){ 
@@ -48,14 +49,21 @@ class User {
     }
 
     getAllTransactions() {
-        return this.transactions;
+        let transactionIds = this.transactions.filter((transactionId) => {
+            return transactionId !== null; 
+        })
+
+        return transactionIds.map((transactionId) => {
+            return this.fullTransaction.get(transactionId);
+        });
     }
     getTransaction(transactionId) {
-        return this.transactions[this.transactionsHashTable.get(transactionId)].getTransaction();
+        return this.fullTransaction.get(transactionId);
     }
     
     addTransaction(transaction) {
-        this.transactions.push(transaction);
+        this.transactions.push(transaction.getId());
+        this.fullTransaction.set(transaction.getId(), transaction);
         // hashtable update
         this.transactionsHashTable.set(transaction.getId(), this.transactions.length - 1);
         //addding in daily transaction if the last element of the dailyTransations 2d array is empty or
@@ -64,12 +72,12 @@ class User {
             this.dailyTransactions.at(-1).push(transaction.getId());
             // hashtable update
             this.dailyTransactionsHashTable.set(transaction.getId(), [this.dailyTransactions.length - 1, this.dailyTransactions.at(-1).length - 1]);
-            this.dateToDailyTransactionIdxHashTable.set(transaction.getDate().toDateString(),this.dailyTransactions.length-1);
+            this.dateToDailyTransactionIdxHashTable.set(transaction.getDate().toDateString(), this.dailyTransactions.length-1);
         } else {
             this.dailyTransactions.push([transaction.getId()]);
             // hashtable update
             this.dailyTransactionsHashTable.set(transaction.getId(), [this.dailyTransactions.length - 1, this.dailyTransactions.at(-1).length - 1]);
-            this.dateToDailyTransactionIdxHashTable.set(transaction.getDate().toDateString(),this.dailyTransactions.length-1);
+            this.dateToDailyTransactionIdxHashTable.set(transaction.getDate().toDateString(), this.dailyTransactions.length-1);
         
         }
 
@@ -95,22 +103,22 @@ class User {
     }
 
 
-    editTransaction(userId,transactionId,amount, mode, status, date, remark) {
+    editTransaction(transactionId,amount, mode, status, remark) {
         const index = this.transactionsHashTable.get(transactionId); //example 4
-        // const dailyIndexes = this.dailyTransactionsHashTable.get(transactionId);  //example [0,1]
-        // const monthlyIndexes = this.monthlyTransactionsHashTable.get(transactionId);
-        // const yearlyIndexes = this.yearlyTransactionsHashTable.get(transactionId);
+        const dailyIndexes = this.dailyTransactionsHashTable.get(transactionId);  //example [0,1]
+        const monthlyIndexes = this.monthlyTransactionsHashTable.get(transactionId);
+        const yearlyIndexes = this.yearlyTransactionsHashTable.get(transactionId);
         
-        this.transactions.at(index).setTransaction(userId, amount, mode, status,date, remark);
+        this.transactions.at(index).setTransaction(amount, mode, status, remark);
 
 
 
         
-        //We Do not need to update the the 2-d arrays as the transactionId does not change
-        //If date is not allowed to be updated
-        // this.dailyTransactions.at(dailyIndexes.at(0)).at(dailyIndexes.at(1)).setTransaction(userId, date, amount, mode, status, remark);
-        // this.monthlyTransactions.at(monthlyIndexes.at(0)).at(monthlyIndexes.at(1)).setTransaction(userId, date, amount, mode, status, remark);
-        // this.yearlyTransactions.at(yearlyIndexes.at(0)).at(yearlyIndexes.at(1)).setTransaction(userId, date, amount, mode, status, remark);
+        // We Do not need to update the the 2-d arrays as the transactionId does not change
+        // If date is not allowed to be updated
+        this.dailyTransactions.at(dailyIndexes.at(0)).at(dailyIndexes.at(1)).setTransaction(amount, mode, status, remark);
+        this.monthlyTransactions.at(monthlyIndexes.at(0)).at(monthlyIndexes.at(1)).setTransaction(amount, mode, status, remark);
+        this.yearlyTransactions.at(yearlyIndexes.at(0)).at(yearlyIndexes.at(1)).setTransaction(amount, mode, status, remark);
         
 
         
@@ -166,6 +174,8 @@ class User {
         const monthlyIndexes = this.monthlyTransactionsHashTable.get(transactionId);
         const yearlyIndexes = this.yearlyTransactionsHashTable.get(transactionId);
 
+        this.fullTransaction.set(transactionId, null);
+
         this.transactions.splice(index, 1);//removing from transactions[]
 
         this.dailyTransactions.at(dailyIndexes.at(0)).splice(dailyIndexes.at(1), 1);  //removing from dailyTransaction[[]]
@@ -191,17 +201,23 @@ class User {
     
     
     getTransactionsFromDate(date){
-        const result = [];
-        if(this.dateToDailyTransactionIdxHashTable.has(date.toDateString())==false){
-            return result;
-        }
-        //return this.dateToDailyTransactionIdxHashTable.get(date.toDateString());
-        let idx = this.dateToDailyTransactionIdxHashTable.get(date.toDateString());
-        for(let i=0;i<this.dailyTransactions[idx].length;i++){
-            let tId = this.dailyTransactions[idx][i]; //Transaction Id
-            result.push(this.getTransaction(tId));
-        }
-        return result;
+        // const result = [];
+        // if(this.dateToDailyTransactionIdxHashTable.has(date.toDateString())==false){
+        //     return result;
+        // }
+        // //return this.dateToDailyTransactionIdxHashTable.get(date.toDateString());
+        // let idx = this.dateToDailyTransactionIdxHashTable.get(date.toDateString());
+        // for(let i=0;i<this.dailyTransactions[idx].length;i++){
+        //     let tId = this.dailyTransactions[idx][i]; //Transaction Id
+        //     result.push(this.getTransaction(tId));
+        // }
+        // return result;
+
+        let index = this.dateToDailyTransactionIdxHashTable.get(date.toDateString());
+        if(index === undefined) return [];
+        return this.dailyTransactions.at(index).map((transactionId) => {
+            return this.fullTransaction.get(transactionId);
+        });
     }
     
 }

@@ -30,7 +30,7 @@ user.addTransaction(t4);
 user.addTransaction(t5);
 user.addTransaction(t6);
 
-//user.editTransaction(user.getId(),t2.getId(), 20, t2.getMode(), Status.SUCCESS,t2.getDate(), "Canteen ka samosa ;-)");
+//user.editTransaction(t2.getId(), 20, t2.getMode(), Status.SUCCESS, "Canteen ka samosa ;-)");
 // console.log(user.getAllTransactions());
 // console.log("EDIT: GET ALL TRANSACTIONS DONE/////////////////////////////////////////////");
 
@@ -54,9 +54,6 @@ console.log(user.getTransactionsFromDate(new Date(2025,6,7)))
 
 console.log("Transactions done on 2025 October 7 are ...")
 console.log(user.getTransactionsFromDate(new Date(2025,9,7)))
-
-
-
 
 // console.log("Daily Transactions")
 // console.log(user.getDailyTransactions());

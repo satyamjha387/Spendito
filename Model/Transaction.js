@@ -36,9 +36,7 @@ class Transaction {
         return this.remark;
     }
 
-    setTransaction(userId, amount, mode, status, date, remark) {
-        this.userId = userId
-        this.date = date
+    setTransaction(amount, mode, status, remark) {
         this.amount = amount
         this.mode = mode
         this.status = status
