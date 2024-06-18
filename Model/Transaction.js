@@ -2,7 +2,7 @@ import { Status } from "./Status.js"
 class Transaction {
     
 
-    constructor(userId, date, amount, mode, status, remark, transactionId) {
+    constructor(userId,transactionId, amount, mode, status,date, remark) {
         this.userId = userId
         this.date = date
         this.amount = amount
@@ -15,12 +15,12 @@ class Transaction {
     getTransaction() {
         return {
             userId: this.userId,
-            date: this.date,
+            transactionId: this.transactionId,
             amount: this.amount,
             mode: this.mode.getMode(),
             status: this.status,
+            date: this.date,
             remark: this.remark,
-            transactionId: this.transactionId
         }
     }
 
@@ -36,9 +36,7 @@ class Transaction {
         return this.remark;
     }
 
-    setTransaction(userId, date, amount, mode, status, remark) {
-        this.userId = userId
-        this.date = date
+    setTransaction(amount, mode, status, remark) {
         this.amount = amount
         this.mode = mode
         this.status = status
