@@ -105,20 +105,20 @@ class User {
 
     editTransaction(transactionId,amount, mode, status, remark) {
         const index = this.transactionsHashTable.get(transactionId); //example 4
-        const dailyIndexes = this.dailyTransactionsHashTable.get(transactionId);  //example [0,1]
-        const monthlyIndexes = this.monthlyTransactionsHashTable.get(transactionId);
-        const yearlyIndexes = this.yearlyTransactionsHashTable.get(transactionId);
+        // const dailyIndexes = this.dailyTransactionsHashTable.get(transactionId);  //example [0,1]
+        // const monthlyIndexes = this.monthlyTransactionsHashTable.get(transactionId);
+        // const yearlyIndexes = this.yearlyTransactionsHashTable.get(transactionId);
         
-        this.transactions.at(index).setTransaction(amount, mode, status, remark);
+        this.fullTransaction.get(this.transactions.at(index)).setTransaction(amount, mode, status, remark);
 
 
 
         
         // We Do not need to update the the 2-d arrays as the transactionId does not change
         // If date is not allowed to be updated
-        this.dailyTransactions.at(dailyIndexes.at(0)).at(dailyIndexes.at(1)).setTransaction(amount, mode, status, remark);
-        this.monthlyTransactions.at(monthlyIndexes.at(0)).at(monthlyIndexes.at(1)).setTransaction(amount, mode, status, remark);
-        this.yearlyTransactions.at(yearlyIndexes.at(0)).at(yearlyIndexes.at(1)).setTransaction(amount, mode, status, remark);
+        // this.fullTransaction.get(this.dailyTransactions.at(dailyIndexes.at(0)).at(dailyIndexes.at(1))).setTransaction(amount, mode, status, remark);
+        // this.fullTransaction.get(this.monthlyTransactions.at(monthlyIndexes.at(0)).at(monthlyIndexes.at(1))).setTransaction(amount, mode, status, remark);
+        // this.fullTransaction.get(this.yearlyTransactions.at(yearlyIndexes.at(0)).at(yearlyIndexes.at(1))).setTransaction(amount, mode, status, remark);
         
 
         
@@ -183,7 +183,7 @@ class User {
         this.yearlyTransactions.at(yearlyIndexes.at(0)).splice(yearlyIndexes.at(1), 1);//removing from yearlyTransactions[[]]
 
         for(let t_index = index; t_index < this.transactions.length; ++t_index) { 
-            this.transactionsHashTable.set(this.transactions[t_index].getId(), index);
+            this.transactionsHashTable.set(this.transactions.at(t_index), t_index);
         }
 
         for(let d_index = dailyIndexes.at(1); d_index < this.dailyTransactions.at(dailyIndexes.at(0)).length; d_index++) {

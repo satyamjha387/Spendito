@@ -49,11 +49,19 @@ console.log(user.getTransactionsFromDate(new Date(2024,5,6)))
 console.log("Transactions done on 2024 July 6 are ...")
 console.log(user.getTransactionsFromDate(new Date(2024,6,6)))
 
-console.log("Transactions done on 2025 July 7 are ...")
-console.log(user.getTransactionsFromDate(new Date(2025,6,7)))
+console.log("Transactions done on 2025 July 10 are ...")
+console.log(user.getTransactionsFromDate(new Date(2025,6,10)))
 
 console.log("Transactions done on 2025 October 7 are ...")
 console.log(user.getTransactionsFromDate(new Date(2025,9,7)))
+console.log("Transaction t3 after editing/.....///////");
+user.editTransaction(t3.getId(), 4000,new Cash("INR"),Status.SUCCESS,"very good update. Very fast huehuehue")
+console.log(user.getTransaction(t3.getId()));
+console.log("Deleting transaction t4.////////////////////////////");
+user.deleteTransaction(t6.getId());
+user.deleteTransaction(t1.getId());
+console.log("Transactions after deleting///////////////////////");
+console.log(user.getAllTransactions());
 
 // console.log("Daily Transactions")
 // console.log(user.getDailyTransactions());
